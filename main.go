@@ -69,7 +69,10 @@ func (fo *FileOrganizer) logError(message string) {
 }
 
 func (fo *FileOrganizer) Close() error {
-	return fo.logFile.Close()
+	if fo.logFile != nil {
+		return fo.logFile.Close()
+	}
+	return nil
 }
 
 func main() {
@@ -78,6 +81,7 @@ func main() {
 		fmt.Printf("Ошибка: %v\n", err)
 		return
 	}
+	defer organizer.Close()
 
 	if err := organizer.initLog(); err != nil {
 		fmt.Printf("Ошибка логирования: %v\n", err)
